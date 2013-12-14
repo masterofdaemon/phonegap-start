@@ -1,80 +1,73 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>BABYLON - BASICS</title>
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    <!--Loading babylon engine -->
+    <script src="babylon.1.7.3.js"></script>
+    <script src="hand.js"></script>
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
 
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/three.min.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-        
-        
-        <script>
+    <!-- CSS -->
+    <!-- ------ -->
+    <style>
+        html, body, div, canvas {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
 
-    var camera, scene, renderer;
-    var geometry, material, mesh;
+</head>
 
-    init();
-    animate();
+<!-- BODY -->
+<!-- ------ -->
+<body>
 
-    function init() {
+    <div id="rootDiv">
 
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 1000;
+        <!-- Main Canvas -->
+        <canvas id="renderCanvas"></canvas>
+    </div>
 
-        scene = new THREE.Scene();
-
-        geometry = new THREE.CubeGeometry( 200, 200, 200 );
-        material = new THREE.MeshBasicMaterial( { color: 0xfa0e99 } );
-
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-
-        renderer = new THREE.CanvasRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-
-        document.body.appendChild( renderer.domElement );
-
-    }
-
-    function animate() {
-
-        // note: three.js includes requestAnimationFrame shim
-        requestAnimationFrame( animate );
-
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
-
-        renderer.render( scene, camera );
-
-    }
-
-</script>
     </body>
+
+
+
+    <!-- BABYLON SCRIPT -->
+    <!-- -------------- -->
+    <script type="text/javascript">
+
+        // Get the Canvas element from our HTML below
+        var canvas = document.getElementById("renderCanvas");
+
+        // Load BABYLON 3D engine and set the root directory
+        var engine = new BABYLON.Engine(canvas, true);
+
+        //Create a new scene with a camera (mandatory), a light (better) and a sphere (to see the origin)
+        var scene = new BABYLON.Scene(engine);
+
+        // Creating a camera looking to the zero point (0,0,0)
+        var camera = new BABYLON.ArcRotateCamera("Camera", 1, 0.8, 10, new BABYLON.Vector3(0, 0, 0), scene);
+        // Creating a omnidirectional light
+        var light0 = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0, 0, 10), scene);
+        // Creating a sphere of size 1, at 0,0,0
+        var origin = BABYLON.Mesh.CreateSphere("origin", 10, 1.0, scene);
+
+
+        // Attach the camera to the scene
+        scene.activeCamera.attachControl(canvas);
+
+
+        // Once the scene is loaded, just register a render loop to render it
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
+
+    </script>
+
+
 </html>
